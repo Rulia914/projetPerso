@@ -1,68 +1,105 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>L'Alchimie Littéraire</title>
-
-  <!-- Vite injecte automatiquement les styles -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>l'Alchimie littéraire</title>
   <script type="module" src="/src/main.js"></script>
 </head>
 
-<body class="bg-[#F4F1EA] text-[#2C302E] font-sans p-6">
 
-  <div class="max-w-3xl mx-auto">
+<body class="bg-[#F5F6F8] text-[#2D2D2D] min-h-screen">
 
-    <!-- TITRE -->
-    <h1 class="text-3xl font-serif tracking-wide mb-6">
-      L'Alchimie Littéraire
-    </h1>
+  <main class="max-w-3xl mx-auto px-4 py-8">
 
-    <!-- FORMULAIRE -->
-    <section class="bg-[#FBFBFA] p-4 rounded mb-6 shadow-sm">
+    <!-- HEADER -->
+    <header class="text-center mb-8">
+      <h1 class="text-3xl md:text-4xl font-serif tracking-tight text-[#1A1A1A]">
+        L'Alchimie Littéraire
+      </h1>
+      <p class="text-[#6B7280] text-sm mt-2">
+        Un livre, quand tu en as vraiment besoin
+      </p>
+    </header>
 
-      <h2 class="font-serif text-xl mb-4">Ajouter un livre</h2>
+    <!-- RESULT + CTA -->
+    <section class="flex flex-col items-center gap-4 mb-8">
 
-      <input id="title"
-        placeholder="Titre"
-        class="block mb-2 w-full border p-2 rounded" />
+      <div id="result"
+        class="w-full bg-white rounded-md p-6 border border-[#E5E7EB] text-center min-h-[140px] flex items-center justify-center">
+        
+        <p class="text-[#6B7280] text-sm">
+          Clique pour découvrir ton prochain livre
+        </p>
 
-      <input id="author"
-        placeholder="Auteur"
-        class="block mb-2 w-full border p-2 rounded" />
-
-      <input id="pages"
-        type="number"
-        placeholder="Nombre de pages"
-        class="block mb-4 w-full border p-2 rounded" />
-
-      <button id="addBook"
-        class="bg-[#4A6B5D] text-white px-4 py-2 rounded hover:opacity-90 transition-all">
-        Ajouter
-      </button>
-
-    </section>
-
-    <!-- ACTION PRINCIPALE -->
-    <section class="mb-6">
+      </div>
 
       <button id="pickBook"
-        class="bg-[#4A6B5D] text-white px-6 py-3 rounded text-lg hover:opacity-90 transition-all">
-        Piocher un livre
+        class="bg-[#2563EB] px-6 py-3 rounded-md text-white text-sm font-medium hover:bg-[#1D4ED8] transition">
+        🎲 Lancer le tirage
       </button>
 
     </section>
 
-    <!-- RESULTAT -->
-    <section id="result" class="mb-6"></section>
+    <!-- FORM INLINE -->
+    <section class="bg-white p-5 rounded-md border border-[#E5E7EB] mb-6">
 
-    <!-- LISTE DES LIVRES -->
-    <section>
-      <h2 class="font-serif text-xl mb-3">Ma PAL</h2>
-      <div id="bookList"></div>
+      <h2 class="text-sm font-semibold text-[#374151] mb-3 uppercase tracking-wide">
+        Ajouter un livre
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-2">
+
+        <input id="title"
+          placeholder="Titre"
+          class="bg-white border border-[#D1D5DB] rounded-md p-2 text-sm md:col-span-2 focus:ring-1 focus:ring-[#2563EB] outline-none" />
+
+        <input id="author"
+          placeholder="Auteur"
+          class="bg-white border border-[#D1D5DB] rounded-md p-2 text-sm focus:ring-1 focus:ring-[#2563EB] outline-none" />
+
+        <input id="pages"
+          type="number"
+          placeholder="Pages"
+          class="bg-white border border-[#D1D5DB] rounded-md p-2 text-sm focus:ring-1 focus:ring-[#2563EB] outline-none" />
+
+      </div>
+
+      <button id="addBook"
+        class="mt-3 bg-[#10B981] px-4 py-2 rounded-md text-sm text-white hover:bg-[#059669] transition">
+        Ajouter
+      </button>
+      <!-- FILTRE TEMPS -->
+      <div class="mt-4 flex flex-col gap-2">
+
+        <label class="flex items-center gap-2 text-sm text-[#6B7280]">
+          <input type="checkbox" id="timeToggle" />
+          Filtrer par temps disponible
+        </label>
+
+        <select id="timeSelect"
+          class="hidden border border-[#D1D5DB] rounded-md p-2 text-sm bg-white">
+          <option value="short">&lt; 2h</option>
+          <option value="medium">2h - 5h</option>
+          <option value="long">&gt; 5h</option>
+        </select>
+
+      </div>
+
+
     </section>
 
-  </div>
+    <!-- LIST -->
+    <section>
+
+      <h2 class="text-sm font-semibold text-[#374151] mb-3 uppercase tracking-wide">
+        Ta pile à lire
+      </h2>
+
+      <div id="bookList" class="flex flex-col gap-2"></div>
+
+    </section>
+
+  </main>
 
 </body>
-</html>

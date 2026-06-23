@@ -2,18 +2,32 @@ import {
   addBook, 
   getAllBooks, 
   deleteBook, 
-  toggleReadStatus 
+  toggleReadStatus,
+  setRating
 } from "./services/bookStorage.js";
 
+import "./styles/tailwind.css";
 import { pickRandomBook } from "./core/randomEngine.js";
 import { renderBook, renderBookList } from "./ui/bookRenderer.js";
+
+const timeToggle = document.getElementById("timeToggle");
+const timeSelect = document.getElementById("timeSelect");
+
+timeToggle.addEventListener("change", () => {
+  if (timeToggle.checked) {
+    timeSelect.classList.remove("hidden");
+  } else {
+    timeSelect.classList.add("hidden");
+  }
+});
+
 
 const addButton = document.getElementById("addBook");
 const pickButton = document.getElementById("pickBook");
 
 function refreshUI() {
   const books = getAllBooks();
-  renderBookList(books, handleDelete, handleToggleRead);
+  renderBookList(books, handleDelete, handleToggleRead, handleRate);
 }
 
 function handleDelete(id) {
@@ -26,7 +40,12 @@ function handleToggleRead(id) {
   refreshUI();
 }
 
-// ADD BOOK
+function handleRate(id, rating) {
+  setRating(id, rating);
+  refreshUI();
+}
+
+// ADD
 addButton.addEventListener("click", () => {
   const title = document.getElementById("title").value;
   const author = document.getElementById("author").value;
@@ -43,7 +62,7 @@ addButton.addEventListener("click", () => {
     author,
     pages: Number(pages),
     read: false,
-    rating: null
+    rating: 0
   });
 
   refreshUI();
@@ -52,9 +71,11 @@ addButton.addEventListener("click", () => {
 // PICK
 pickButton.addEventListener("click", () => {
   const books = getAllBooks();
-  const selectedBook = pickRandomBook(books);
+
+  const useFilter = timeToggle.checked;
+  const selectedTime = timeSelect.value;
+
+  const selectedBook = pickRandomBook(books, useFilter, selectedTime);
+
   renderBook(selectedBook);
 });
-
-// INIT
-refreshUI();

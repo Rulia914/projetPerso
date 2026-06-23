@@ -30,3 +30,14 @@ export function toggleReadStatus(id) {
 
   saveAllBooks(books);
 }
+export function setRating(id, rating) {
+    const books = getAllBooks().map(book => {
+      if (book.id === id) {
+        return { ...book, rating };
+      }
+      return book;
+    });
+  
+    saveAllBooks(books);
+  }
+  ``

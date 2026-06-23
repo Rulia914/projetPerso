@@ -1,60 +1,121 @@
-export function renderBook(book) {
+export function renderStars(book, onRate) {
+    if (!book.read) return "";
+  
+    let stars = "";
+  
+    for (let i = 1; i <= 5; i++) {
+      const filled = i <= book.rating;
+  
+      stars += `
+        <button
+          data-id="${book.id}"
+          data-rating="${i}"
+          class="star text-lg ${filled ? "text-yellow-400" : "text-gray-300"}">
+          ★
+        </button>
+      `;
+    }
+  
+    return `<div class="flex gap-1 mt-1">${stars}</div>`;
+  }
+  
+  export function renderBook(book) {
     const container = document.getElementById("result");
   
     if (!book) {
-      container.innerHTML = "<p>Aucun livre disponible</p>";
+      container.innerHTML = `
+        <p class="text-gray-500 text-sm">
+          Aucun livre disponible
+        </p>
+      `;
       return;
     }
   
     container.innerHTML = `
-      <div class="bg-[#FBFBFA] p-4 rounded shadow">
-        <h2 class="font-serif text-xl mb-2">${book.title}</h2>
-        <p>${book.author}</p>
-        <p>${book.pages} pages</p>
+      <div class="text-center">
+        <h2 class="text-lg font-serif mb-1">
+          ${book.title}
+        </h2>
+        <p class="text-sm text-gray-500">
+          ${book.author}
+        </p>
+        <p class="text-xs text-gray-400">
+          ${book.pages} pages
+        </p>
       </div>
     `;
   }
   
-  export function renderBookList(books, onDelete, onToggleRead) {
+  export function renderBookList(books, onDelete, onToggleRead, onRate) {
     const container = document.getElementById("bookList");
   
     if (books.length === 0) {
-      container.innerHTML = "<p>Aucun livre</p>";
+      container.innerHTML = `
+        <p class="text-gray-500 text-sm">
+          Aucun livre dans ta PAL
+        </p>
+      `;
       return;
     }
   
-    container.innerHTML = books.map(book => `
-      <div class="bg-white p-3 mb-2 rounded shadow flex justify-between items-center">
-        <div>
-          <p class="font-semibold ${book.read ? "line-through" : ""}">
-            ${book.title}
-          </p>
-          <p class="text-sm">${book.author}</p>
-        </div>
+    let html = "";
   
-        <div class="flex gap-2">
-          <button 
-            data-id="${book.id}" 
-            class="toggle-read bg-green-500 text-white px-2 py-1 text-xs">
-            ${book.read ? "Lu ✅" : "Non lu"}
-          </button>
+    books.forEach(book => {
+      html += `
+        <div class="bg-white p-3 rounded-md border border-gray-200 flex justify-between items-start">
   
-          <button 
-            data-id="${book.id}" 
-            class="delete-book bg-red-500 text-white px-2 py-1 text-xs">
-            Supprimer
-          </button>
+          <div class="flex-1">
+            <h3 class="text-sm font-semibold ${book.read ? "text-gray-400" : "text-gray-900"}">
+              ${book.title}
+            </h3>
+  
+            <p class="text-xs text-gray-500">
+              ${book.author}
+            </p>
+  
+            ${renderStars(book)}
+  
+          </div>
+  
+          <div class="flex flex-col gap-1">
+  
+            <button
+              data-id="${book.id}"
+              class="toggle-read text-xs px-2 py-1 rounded bg-gray-200">
+              ${book.read ? "Lu" : "Non lu"}
+            </button>
+  
+            <button
+              data-id="${book.id}"
+              class="delete-book text-xs px-2 py-1 rounded bg-red-500 text-white">
+              ✕
+            </button>
+  
+          </div>
+  
         </div>
-      </div>
-    `).join("");
+      `;
+    });
+  
+    container.innerHTML = html;
   
     // EVENTS
     document.querySelectorAll(".delete-book").forEach(btn => {
-      btn.addEventListener("click", () => onDelete(Number(btn.dataset.id)));
+      btn.addEventListener("click", () => {
+        onDelete(Number(btn.dataset.id));
+      });
     });
   
     document.querySelectorAll(".toggle-read").forEach(btn => {
-      btn.addEventListener("click", () => onToggleRead(Number(btn.dataset.id)));
+      btn.addEventListener("click", () => {
+        onToggleRead(Number(btn.dataset.id));
+      });
+    });
+  
+    document.querySelectorAll(".star").forEach(star => {
+      star.addEventListener("click", () => {
+        onRate(Number(star.dataset.id), Number(star.dataset.rating));
+      });
     });
   }
   ``

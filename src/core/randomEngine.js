@@ -1,9 +1,23 @@
-export function pickRandomBook(books) {
-    const unreadBooks = books.filter(book => book.read === false);
+export function pickRandomBook(books, useFilter = false, time = null) {
+    let filteredBooks = books.filter(book => !book.read);
   
-    if (unreadBooks.length === 0) return null;
+    if (useFilter && time) {
+      if (time === "short") {
+        filteredBooks = filteredBooks.filter(book => book.pages < 120);
+      }
   
-    const randomIndex = Math.floor(Math.random() * unreadBooks.length);
-    return unreadBooks[randomIndex];
+      if (time === "medium") {
+        filteredBooks = filteredBooks.filter(book => book.pages >= 120 && book.pages <= 300);
+      }
+  
+      if (time === "long") {
+        filteredBooks = filteredBooks.filter(book => book.pages > 300);
+      }
+    }
+  
+    if (filteredBooks.length === 0) return null;
+  
+    const index = Math.floor(Math.random() * filteredBooks.length);
+    return filteredBooks[index];
   }
-  ``
+  
