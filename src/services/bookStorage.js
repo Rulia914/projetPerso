@@ -14,3 +14,19 @@ export function addBook(book) {
   books.push(book);
   saveAllBooks(books);
 }
+
+export function deleteBook(id) {
+  const books = getAllBooks().filter(book => book.id !== id);
+  saveAllBooks(books);
+}
+
+export function toggleReadStatus(id) {
+  const books = getAllBooks().map(book => {
+    if (book.id === id) {
+      return { ...book, read: !book.read };
+    }
+    return book;
+  });
+
+  saveAllBooks(books);
+}
