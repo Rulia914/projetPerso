@@ -1,43 +1,61 @@
-const STORAGE_KEY = "alchimie-books";
+// =======================
+// ✅ USER MANAGEMENT
+// =======================
 
-export function getAllBooks() {
-  const data = localStorage.getItem(STORAGE_KEY);
+export function setCurrentUser(username) {
+  localStorage.setItem("user_current", username);
+}
+
+export function getCurrentUser() {
+  return localStorage.getItem("user_current");
+}
+
+// ✅ clé dynamique par utilisateur
+function getStorageKey() {
+  const user = getCurrentUser();
+  return user ? `books_${user}` : "books_default";
+}
+
+// =======================
+// ✅ STORAGE
+// =======================
+
+export function loadBooks() {
+  const key = getStorageKey();
+  const data = localStorage.getItem(key);
   return data ? JSON.parse(data) : [];
 }
 
-export function saveAllBooks(books) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(books));
+export function saveBooks(books) {
+  const key = getStorageKey();
+  localStorage.setItem(key, JSON.stringify(books));
 }
 
+// =======================
+// ✅ CRUD
+// =======================
+
 export function addBook(book) {
-  const books = getAllBooks();
+  const books = loadBooks();
   books.push(book);
-  saveAllBooks(books);
+  saveBooks(books);
 }
 
 export function deleteBook(id) {
-  const books = getAllBooks().filter(book => book.id !== id);
-  saveAllBooks(books);
+  const books = loadBooks().filter(book => book.id !== id);
+  saveBooks(books);
 }
 
 export function toggleReadStatus(id) {
-  const books = getAllBooks().map(book => {
-    if (book.id === id) {
-      return { ...book, read: !book.read };
-    }
-    return book;
-  });
-
-  saveAllBooks(books);
+  const books = loadBooks().map(book =>
+    book.id === id ? { ...book, read: !book.read } : book
+  );
+  saveBooks(books);
 }
+
 export function setRating(id, rating) {
-    const books = getAllBooks().map(book => {
-      if (book.id === id) {
-        return { ...book, rating };
-      }
-      return book;
-    });
-  
-    saveAllBooks(books);
-  }
-  ``
+  const books = loadBooks().map(book =>
+    book.id === id ? { ...book, rating } : book
+  );
+  saveBooks(books);
+}
